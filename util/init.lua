@@ -16,12 +16,12 @@ local sqrt         = math.sqrt
 local pairs        = pairs
 local client       = client
 local tonumber     = tonumber
-local wrequire     = require("lain.helpers").wrequire
+local wrequire     = require("modules.lain.helpers").wrequire
 local setmetatable = setmetatable
 
 -- Lain utilities submodule
 -- lain.util
-local util = { _NAME = "lain.util" }
+local util = { _NAME = ... }
 
 -- Like awful.menu.clients, but only show clients of currently selected tags
 function util.menu_clients_current_tags(menu, args)
@@ -35,18 +35,18 @@ function util.menu_clients_current_tags(menu, args)
 
     -- For each selected tag get all clients of that tag and add them to
     -- the menu. A click on a menu item will raise that client.
-    for i = 1,#cls_tags do
+    for i = 1, #cls_tags do
         local t   = cls_tags[i]
         local cls = t:clients()
 
         for _, c in pairs(cls) do
             cls_t[#cls_t + 1] = { awful.util.escape(c.name) or "",
-                                  function ()
-                                      c.minimized = false
-                                      client.focus = c
-                                      c:raise()
-                                  end,
-                                  c.icon }
+                function()
+                    c.minimized = false
+                    client.focus = c
+                    c:raise()
+                end,
+                c.icon }
         end
     end
 
@@ -96,7 +96,7 @@ end
 
 -- Non-empty tag browsing
 -- direction in {-1, 1} <-> {previous, next} non-empty tag
-function util.tag_view_nonempty(direction,sc)
+function util.tag_view_nonempty(direction, sc)
     direction  = direction or 1
     local s    = sc or awful.screen.focused()
     local tags = s.tags
@@ -138,7 +138,8 @@ function util.add_tag(layout)
         textbox      = awful.screen.focused().mypromptbox.widget,
         exe_callback = function(name)
             if not name or #name == 0 then return end
-            awful.tag.add(name, { screen = awful.screen.focused(), layout = layout or awful.layout.suit.tile }):view_only()
+            awful.tag.add(name, { screen = awful.screen.focused(), layout = layout or awful.layout.suit.tile }):
+                view_only()
         end
     }
 end
